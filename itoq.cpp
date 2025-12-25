@@ -136,6 +136,7 @@ public:
     int Insert(const Triangle& t) {
         try {
             Node* n=new Node(t,current->next);
+            n->next=current->next;
             current->next=n;
             return 0;
         } catch (...) {
@@ -223,6 +224,6 @@ int main() {
 
     l.Write(fout);
 
-    cout << "Готово\n";
+   
     return 0;
 }

@@ -1,0 +1,3 @@
+Triangle 1 P=12 S=6
+Triangle 2 P=12 S=6
+Triangle 4 P=12 S=6
