@@ -25,14 +25,14 @@ public:
     Triangle():p1(0,0),p2(0,0),p3(0,0){}
     Triangle(const Point& a, const Point& b, const Point& c):p1(a),p2(b),p3(c){}
 
-    bool is_valid() const{
+    bool is_valid() const {
         double a=dist(p1,p2);
         double b=dist(p2,p3);
         double c=dist(p1,p3);
         return (a+b > c) && (a+c > b) && (b+c > a);
     }
 
-    double perimeter() const{
+    double perimeter() const {
         return dist(p1,p2)+dist(p2,p3)+dist(p3,p1);
     }
 
@@ -42,7 +42,7 @@ public:
         double c=dist(p3, p1);
         double p=(a+b+c)/2.0;
         double t=p*(p-a)*(p-b)*(p-c);
-        if (t <= 0.0) return 0.0;
+        if (t <= 0) return 0;
         return sqrt(t);
     }
 };
