@@ -49,12 +49,11 @@ public:
 
 class List {
 private:
-    struct Node {
-        Triangle value;
-        Node* next;
-        Node(const Triangle& v = Triangle(), Node* n=0)
-            : value(v), next(n) {}
-    };
+struct Node {
+    Triangle value;
+    Node* next;
+    Node(Triangle v = Triangle(), Node* n = nullptr):value(v),next(n) {}
+};
 
     Node base;
     Node* current;
