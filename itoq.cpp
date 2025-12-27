@@ -45,15 +45,20 @@ public:
         if (t <= 0) return 0;
         return sqrt(t);
     }
+    void show(ofstream &fout) const{
+		fout<<"( "<<p1.get_x()<<","<<p1.get_y()<<" ) "<<"( "<<p2.get_x()<<","<<p2.get_y()<<" ) "<<"( "<<p3.get_x()<<","<<p3.get_y()<<" ) ";
+		
+	}
 };
 
 class List {
 private:
-struct Node {
-    Triangle value;
-    Node* next;
-    Node(Triangle v = Triangle(), Node* n = nullptr):value(v),next(n) {}
-};
+    struct Node {
+        Triangle value;
+        Node* next;
+        Node( Triangle v = Triangle(), Node* n=nullptr)
+            : value(v), next(n) {}
+    };
 
     Node base;
     Node* current;
@@ -150,7 +155,21 @@ public:
         delete v;
         return 0;
     }
-
+    
+    //
+    int Get(Triangle *x){
+		if(current==&base) return -1;
+		*x=current->value;
+		return 0;
+	}
+	//
+	int Set(Triangle x){
+		if(current==&base) return -1;
+		current->value=x;
+		return 0;
+	}
+	//
+	
     int CurrentValid(bool& res) const {
         if (current==&base) return -1;
         res=current->value.is_valid();
@@ -174,7 +193,9 @@ public:
         int i = 1;
         while (p!=&base) {
             if (p->value.is_valid()) {
-                fout <<"Triangle "<<i<<" P="<< p->value.perimeter()<<" S="<<p->value.area()<< "\n";
+                fout <<"Triangle "<<i<<" ";
+                p->value.show(fout);
+                fout<<" P="<< p->value.perimeter()<<" S="<<p->value.area()<< "\n";
             }
             i++;
             p=p->next;
@@ -222,6 +243,15 @@ int main() {
     }
 
     l.Write(fout);
+    Triangle x;
+    l.GotoBeg();
+l.StepForward();
+l.Get(&x);
+x.show(fout);
+fout<<endl;
+Triangle new_x(Point (2,2),Point (3,4),Point (9,2));
+l.Set( new_x);
+l.Write(fout);
 
    
     return 0;
