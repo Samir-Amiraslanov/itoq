@@ -49,6 +49,7 @@ public:
 		else return 0;
 	}
 
+
     double perimeter() const {
         return dist(p1,p2)+dist(p2,p3)+dist(p3,p1);
     }
@@ -62,15 +63,28 @@ public:
         if (t <= 0) return 0;
         return sqrt(t);
     }
+    void show(ofstream &fout) const{
+		fout<<"( "<<p1.get_x()<<","<<p1.get_y()<<" ) "<<"( "<<p2.get_x()<<","<<p2.get_y()<<" ) "<<"( "<<p3.get_x()<<","<<p3.get_y()<<" ) ";
+		
+	}
 };
 
 class List {
 private:
+<<<<<<< HEAD
 struct Node {
     Triangle value;
     Node* next;
     Node(Triangle v = Triangle(), Node* n = nullptr):value(v),next(n) {}
 };
+=======
+    struct Node {
+        Triangle value;
+        Node* next;
+        Node( Triangle v = Triangle(), Node* n=nullptr)
+            : value(v), next(n) {}
+    };
+>>>>>>> 1fcf9a455d51c3a50b35bc09400b0219b80128aa
 
     Node base;
     Node* current;
@@ -167,7 +181,21 @@ public:
         delete v;
         return 0;
     }
-
+    
+    //
+    int Get(Triangle *x){
+		if(current==&base) return -1;
+		*x=current->value;
+		return 0;
+	}
+	//
+	int Set(Triangle x){
+		if(current==&base) return -1;
+		current->value=x;
+		return 0;
+	}
+	//
+	
     int CurrentValid(bool& res) const {
         if (current==&base) return -1;
         res=current->value.is_valid();
@@ -192,6 +220,7 @@ public:
         int count=0;
         while (p!=&base) {
             if (p->value.is_valid()) {
+<<<<<<< HEAD
                 fout <<"Triangle "<<i<<" P="<< p->value.perimeter()<<" S="<<p->value.area();
                 if(p->value.ravnobedr()){
 					fout<<" ravnobedreniy";
@@ -199,6 +228,11 @@ public:
 				}
 				fout<<endl;
 				
+=======
+                fout <<"Triangle "<<i<<" ";
+                p->value.show(fout);
+                fout<<" P="<< p->value.perimeter()<<" S="<<p->value.area()<< "\n";
+>>>>>>> 1fcf9a455d51c3a50b35bc09400b0219b80128aa
             }
             i++;
             p=p->next;
@@ -247,6 +281,15 @@ int main() {
     }
 
     l.Write(fout);
+    Triangle x;
+    l.GotoBeg();
+l.StepForward();
+l.Get(&x);
+x.show(fout);
+fout<<endl;
+Triangle new_x(Point (2,2),Point (3,4),Point (9,2));
+l.Set( new_x);
+l.Write(fout);
 
    
     return 0;
