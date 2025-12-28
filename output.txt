@@ -1,3 +1,4 @@
-Triangle 1 P=12 S=6
+Triangle 1 P=10.2426 S=4.5 ravnobedreniy
 Triangle 2 P=12 S=6
 Triangle 4 P=12 S=6
+kolvo ravnobedr: 1

@@ -25,14 +25,31 @@ public:
     Triangle():p1(0,0),p2(0,0),p3(0,0){}
     Triangle(const Point& a, const Point& b, const Point& c):p1(a),p2(b),p3(c){}
 
-    bool is_valid() const{
+    bool is_valid() const {
         double a=dist(p1,p2);
         double b=dist(p2,p3);
         double c=dist(p1,p3);
         return (a+b > c) && (a+c > b) && (b+c > a);
+        
     }
+    
 
-    double perimeter() const{
+		bool ravnobedr() const{
+		double a=dist(p1,p2);
+        double b=dist(p2,p3);
+        double c=dist(p1,p3);
+        double eps=1e-16;
+       // cout<<a<<" "<<b<<" "<<c<<endl;
+        //cout<<eps<<endl;
+		
+        if(abs(a-b)<eps || abs(a-c)<eps || abs(b-c)<eps){
+			
+			return 1;
+		}
+		else return 0;
+	}
+
+    double perimeter() const {
         return dist(p1,p2)+dist(p2,p3)+dist(p3,p1);
     }
 
@@ -42,19 +59,18 @@ public:
         double c=dist(p3, p1);
         double p=(a+b+c)/2.0;
         double t=p*(p-a)*(p-b)*(p-c);
-        if (t <= 0.0) return 0.0;
+        if (t <= 0) return 0;
         return sqrt(t);
     }
 };
 
 class List {
 private:
-    struct Node {
-        Triangle value;
-        Node* next;
-        Node(const Triangle& v = Triangle(), Node* n=0)
-            : value(v), next(n) {}
-    };
+struct Node {
+    Triangle value;
+    Node* next;
+    Node(Triangle v = Triangle(), Node* n = nullptr):value(v),next(n) {}
+};
 
     Node base;
     Node* current;
@@ -173,13 +189,21 @@ public:
     void Write(ofstream& fout) const {
         const Node* p =base.next;
         int i = 1;
+        int count=0;
         while (p!=&base) {
             if (p->value.is_valid()) {
-                fout <<"Triangle "<<i<<" P="<< p->value.perimeter()<<" S="<<p->value.area()<< "\n";
+                fout <<"Triangle "<<i<<" P="<< p->value.perimeter()<<" S="<<p->value.area();
+                if(p->value.ravnobedr()){
+					fout<<" ravnobedreniy";
+					count++;
+				}
+				fout<<endl;
+				
             }
             i++;
             p=p->next;
         }
+        fout<<"kolvo ravnobedr: "<<count<<endl;
     }
 };
 
