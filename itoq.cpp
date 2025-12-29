@@ -30,25 +30,15 @@ public:
         double b=dist(p2,p3);
         double c=dist(p1,p3);
         return (a+b > c) && (a+c > b) && (b+c > a);
-        
     }
-    
-
-		bool ravnobedr() const{
+    bool ravnobedr() const{
 		double a=dist(p1,p2);
         double b=dist(p2,p3);
         double c=dist(p1,p3);
         double eps=1e-16;
-       // cout<<a<<" "<<b<<" "<<c<<endl;
-        //cout<<eps<<endl;
+        return abs(a-b)<eps || abs(a-c)<eps || abs(b-c)<eps;
 		
-        if(abs(a-b)<eps || abs(a-c)<eps || abs(b-c)<eps){
-			
-			return 1;
-		}
-		else return 0;
 	}
-
 
     double perimeter() const {
         return dist(p1,p2)+dist(p2,p3)+dist(p3,p1);
@@ -64,27 +54,19 @@ public:
         return sqrt(t);
     }
     void show(ofstream &fout) const{
-		fout<<"( "<<p1.get_x()<<","<<p1.get_y()<<" ) "<<"( "<<p2.get_x()<<","<<p2.get_y()<<" ) "<<"( "<<p3.get_x()<<","<<p3.get_y()<<" ) ";
-		
-	}
+  fout<<"( "<<p1.get_x()<<","<<p1.get_y()<<" ) "<<"( "<<p2.get_x()<<","<<p2.get_y()<<" ) "<<"( "<<p3.get_x()<<","<<p3.get_y()<<" ) ";
+  
+ }
 };
 
 class List {
 private:
-<<<<<<< HEAD
-struct Node {
-    Triangle value;
-    Node* next;
-    Node(Triangle v = Triangle(), Node* n = nullptr):value(v),next(n) {}
-};
-=======
     struct Node {
         Triangle value;
         Node* next;
         Node( Triangle v = Triangle(), Node* n=nullptr)
             : value(v), next(n) {}
     };
->>>>>>> 1fcf9a455d51c3a50b35bc09400b0219b80128aa
 
     Node base;
     Node* current;
@@ -162,6 +144,7 @@ public:
         current=current->next;
         return 0;
     }
+    void showbase(ofstream& fout){base.value.show(fout);}
 
     int Insert(const Triangle& t) {
         try {
@@ -184,18 +167,18 @@ public:
     
     //
     int Get(Triangle *x){
-		if(current==&base) return -1;
-		*x=current->value;
-		return 0;
-	}
-	//
-	int Set(Triangle x){
-		if(current==&base) return -1;
-		current->value=x;
-		return 0;
-	}
-	//
-	
+  if(current==&base) return -1;
+  *x=current->value;
+  return 0;
+ }
+ //
+ int Set(Triangle x){
+  if(current==&base) return -1;
+  current->value=x;
+  return 0;
+ }
+ //
+ 
     int CurrentValid(bool& res) const {
         if (current==&base) return -1;
         res=current->value.is_valid();
@@ -207,7 +190,6 @@ public:
         p=current->value.perimeter();
         return 0;
     }
-
     int CurrentArea(double& s) const {
         if (current==&base) return -1;
         s=current->value.area();
@@ -217,27 +199,19 @@ public:
     void Write(ofstream& fout) const {
         const Node* p =base.next;
         int i = 1;
-        int count=0;
         while (p!=&base) {
             if (p->value.is_valid()) {
-<<<<<<< HEAD
-                fout <<"Triangle "<<i<<" P="<< p->value.perimeter()<<" S="<<p->value.area();
-                if(p->value.ravnobedr()){
-					fout<<" ravnobedreniy";
-					count++;
-				}
-				fout<<endl;
-				
-=======
                 fout <<"Triangle "<<i<<" ";
                 p->value.show(fout);
-                fout<<" P="<< p->value.perimeter()<<" S="<<p->value.area()<< "\n";
->>>>>>> 1fcf9a455d51c3a50b35bc09400b0219b80128aa
+                fout<<" P="<< p->value.perimeter()<<" S="<<p->value.area();
+                if(p->value.ravnobedr()){
+					fout<<"ravnobedr";
+				}
+				cout<<endl;
             }
             i++;
             p=p->next;
         }
-        fout<<"kolvo ravnobedr: "<<count<<endl;
     }
 };
 
@@ -290,6 +264,7 @@ fout<<endl;
 Triangle new_x(Point (2,2),Point (3,4),Point (9,2));
 l.Set( new_x);
 l.Write(fout);
+l.showbase(fout);
 
    
     return 0;
