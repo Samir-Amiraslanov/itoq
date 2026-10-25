@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <windows.h>
 
-using namespace std;
 
 class Point{
     double x,y;
@@ -53,7 +53,7 @@ public:
         if (t <= 0) return 0;
         return sqrt(t);
     }
-    void show(ofstream &fout) const{
+    void show(std::ofstream &fout) const{
   fout<<"( "<<p1.get_x()<<","<<p1.get_y()<<" ) "<<"( "<<p2.get_x()<<","<<p2.get_y()<<" ) "<<"( "<<p3.get_x()<<","<<p3.get_y()<<" ) ";
   
  }
@@ -144,7 +144,7 @@ public:
         current=current->next;
         return 0;
     }
-    void showbase(ofstream& fout){base.value.show(fout);}
+    void showbase(std::ofstream& fout){base.value.show(fout);}
 
     int Insert(const Triangle& t) {
         try {
@@ -196,7 +196,7 @@ public:
         return 0;
     }
 
-    void Write(ofstream& fout) const {
+    void Write(std::ofstream& fout) const {
         const Node* p =base.next;
         int i = 1;
         while (p!=&base) {
@@ -207,7 +207,7 @@ public:
                 if(p->value.ravnobedr()){
 					fout<<"ravnobedr";
 				}
-				cout<<endl;
+                std::cout<< std::endl;
             }
             i++;
             p=p->next;
@@ -216,16 +216,18 @@ public:
 };
 
 int main() {
-    ifstream fin("input.txt");
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    std::ifstream fin("input.txt");
     if (!fin) {
-        cout<<"файл не открылся\n";
+        std::cout<<"файл не открылся\n";
         return 1;
     }
 
     int n;
     fin>>n;
     if (!fin || n <= 0) {
-        cout <<"Ошибка при чтении\n";
+        std::cout <<"Ошибка при чтении\n";
         return 2;
     }
 
@@ -236,21 +238,21 @@ int main() {
         double x1, y1, x2, y2, x3, y3;
         fin>>x1>>y1>>x2>>y2>>x3>>y3;
         if (!fin) {
-            cout << "Ошибка чтения координат\n";
+            std::cout << "Ошибка чтения координат\n";
             return 3;
         }
 
         Triangle t(Point(x1,y1),Point(x2,y2), Point(x3,y3));
         if (l.Insert(t) < 0) {
-            cout<<"Ошибка памяти\n";
+            std::cout<<"Ошибка памяти\n";
             return 4;
         }
         l.StepForward();
     }
 
-    ofstream fout("output.txt");
+    std::ofstream fout("output.txt");
     if (!fout) {
-        cout << "Ошибка открытия output.txt\n";
+        std::cout << "Ошибка открытия output.txt\n";
         return 5;
     }
 
@@ -260,7 +262,7 @@ int main() {
 l.StepForward();
 l.Get(&x);
 x.show(fout);
-fout<<endl;
+fout<< std::endl;
 Triangle new_x(Point (2,2),Point (3,4),Point (9,2));
 l.Set( new_x);
 l.Write(fout);
