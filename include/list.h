@@ -2,13 +2,15 @@
 #include "triangle.h"
 #include <fstream>
 #include <iostream>
+#include <memory>
+
 
 class List {
 private:
     struct Node {
         Triangle value;
-        Node* next;
-        Node(Triangle v = Triangle(), Node* n = nullptr);
+        std::unique_ptr<Node> next;
+        Node(Triangle v = Triangle(), std::unique_ptr<Node> n = nullptr);
     };
 
     Node base;
