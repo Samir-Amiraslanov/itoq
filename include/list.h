@@ -24,6 +24,7 @@ public:
 
     List& operator=(const List& other);
 
+
     void GotoBeg();
     int StepForward();
     void showbase(std::ofstream& fout);

@@ -3,6 +3,7 @@ project(proga)
 
 set(CMAKE_CXX_STANDARD 20)
 
+
 include(FetchContent)
 set(BOOST_INCLUDE_LIBRARIES program_options)
 set(BOOST_ENABLE_CMAKE ON)

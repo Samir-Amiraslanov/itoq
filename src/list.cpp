@@ -4,6 +4,7 @@ List::Node::Node(Triangle v, std::unique_ptr<Node> n) : value(v), next(std::move
 
 
 void List::clear() {
+
     base.next.reset();
     current = &base;
 }
