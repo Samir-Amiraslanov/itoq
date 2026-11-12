@@ -1,3 +1,12 @@
 cmake-build-*/
  *.exe
  .idea/
+ doctest.h
+ cmake-build-*/
+ .idea/
+ .vs/
+ out/
+ build/
+ *.exe
+ *.obj
+ *.o

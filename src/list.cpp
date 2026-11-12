@@ -1,37 +1,27 @@
 #include "../include/list.h"
 
-List::Node::Node(Triangle v, Node* n) : value(v), next(n) {}
+List::Node::Node(Triangle v, std::unique_ptr<Node> n) : value(v), next(std::move(n)) {}
+
 
 void List::clear() {
-    Node* p = base.next;
-    while (p != &base) {
-        Node* tmp = p->next;
-        delete p;
-        p = tmp;
-    }
-    base.next = &base;
+
+    base.next.reset();
     current = &base;
 }
 
-List::List() : base(Triangle(), nullptr), current(&base) {
-    base.next = &base;
-}
+
+List::List() : base(Triangle(), nullptr), current(&base) {}
 
 List::List(const List& other) : base(Triangle(), nullptr), current(&base) {
-    base.next = &base;
     Node* tail = &base;
-    Node* p = other.base.next;
+    Node* p = other.base.next.get();
 
-    try {
-        while (p != &other.base) {
-            Node* n = new Node(p->value, &base);
-            tail->next = n;
-            tail = n;
-            if (p == other.current) current = n;
-            p = p->next;
-        }
-    } catch (...) {
-        clear();
+
+    while (p != nullptr) {
+        tail->next = std::make_unique<Node>(p->value, nullptr);
+        if (p == other.current) current = tail->next.get();
+        tail = tail->next.get();
+        p = p->next.get();
     }
 
     if (other.current == &other.base)
@@ -47,18 +37,13 @@ List& List::operator=(const List& other) {
     clear();
 
     Node* tail = &base;
-    Node* p = other.base.next;
+    Node* p = other.base.next.get();
 
-    try {
-        while (p != &other.base) {
-            Node* n = new Node(p->value, &base);
-            tail->next = n;
-            tail = n;
-            if (p == other.current) current = n;
-            p = p->next;
-        }
-    } catch (...) {
-        clear();
+    while (p != nullptr) {
+        tail->next = std::make_unique<Node>(p->value, nullptr);
+        if (p == other.current) current = tail->next.get();
+        tail = tail->next.get();
+        p = p->next.get();
     }
 
     if (other.current == &other.base)
@@ -72,8 +57,8 @@ void List::GotoBeg() {
 }
 
 int List::StepForward() {
-    if (current->next == &base) return -1;
-    current = current->next;
+    if (current->next == nullptr) return -1;
+    current = current->next.get();
     return 0;
 }
 
@@ -83,9 +68,9 @@ void List::showbase(std::ofstream& fout) {
 
 int List::Insert(const Triangle& t) {
     try {
-        Node* n = new Node(t, current->next);
-        n->next = current->next;
-        current->next = n;
+
+        auto n = std::make_unique<Node>(t, std::move(current->next));
+        current->next = std::move(n);
         return 0;
     } catch (...) {
         return -1;
@@ -93,10 +78,8 @@ int List::Insert(const Triangle& t) {
 }
 
 int List::Delete() {
-    Node* v = current->next;
-    if (v == &base) return -1;
-    current->next = v->next;
-    delete v;
+    if (current->next == nullptr) return -1;
+    current->next = std::move(current->next->next);
     return 0;
 }
 
@@ -131,9 +114,9 @@ int List::CurrentArea(double& s) const {
 }
 
 void List::Write(std::ofstream& fout) const {
-    const Node* p = base.next;
+    const Node* p = base.next.get();
     int i = 1;
-    while (p != &base) {
+    while (p != nullptr) {
         if (p->value.is_valid()) {
             fout << "Triangle " << i << " ";
             p->value.show(fout);
@@ -141,9 +124,9 @@ void List::Write(std::ofstream& fout) const {
             if(p->value.ravnobedr()){
                 fout << "ravnobedr";
             }
-            std::cout << std::endl;
+            fout << std::endl;
         }
         i++;
-        p = p->next;
+        p = p->next.get();
     }
 }
