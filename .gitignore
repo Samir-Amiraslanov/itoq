@@ -1,7 +1,7 @@
 cmake-build-*/
  *.exe
  .idea/
- doctest.h
+ tests/doctest.h
  cmake-build-*/
  .idea/
  .vs/

@@ -1,8 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
-#include "include/point.h"
-#include "include/triangle.h"
-#include "include/list.h"
+#include "../include/point.h"
+#include "../include/triangle.h"
+#include "../include/list.h"
 
 TEST_CASE("Triangle geometry tests") {
     Point p1(0, 0);
