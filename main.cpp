@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <string>
+#include <sstream>
+#include <regex>
 #include <windows.h>
 #include "include/point.h"
 #include "include/triangle.h"
@@ -17,23 +20,28 @@ int main() {
         return 1;
     }
 
-    int n;
-    fin>>n;
-    if (!fin || n <= 0) {
-        std::cout <<"Ошибка при чтении\n";
+    std::regex int_pattern(R"(^\s*[1-9]\d*\s*$)");
+    std::regex coords_pattern(R"(^\s*([+-]?\d+(\.\d+)?\s+){5}[+-]?\d+(\.\d+)?\s*$)");
+
+    std::string line;
+    if (!std::getline(fin, line) || !std::regex_match(line, int_pattern)) {
+        std::cout << "Ошибка при чтении количества треугольников\n";
         return 2;
     }
+    int n = std::stoi(line);
 
     List l;
     l.GotoBeg();
 
     for (int i=0; i<n; i++) {
-        double x1, y1, x2, y2, x3, y3;
-        fin>>x1>>y1>>x2>>y2>>x3>>y3;
-        if (!fin) {
-            std::cout << "Ошибка чтения координат\n";
+        if (!std::getline(fin, line) || !std::regex_match(line, coords_pattern)) {
+            std::cout << "Ошибка чтения координат в строке " << (i + 2) << "\n";
             return 3;
         }
+
+        double x1, y1, x2, y2, x3, y3;
+        std::istringstream iss(line);
+        iss >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
 
         Triangle t(Point(x1,y1),Point(x2,y2), Point(x3,y3));
         if (l.Insert(t) < 0) {
